@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svg="http://www.w3.org/2000/svg" version="1.1" baseProfile="full" preserveAspectRatio="xMidYMid meet" viewBox="0 0 100 100" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"  fill="none">
+<g stroke="white">
+<path fill="white" d="M 41.5,90 40.76,12.8 23.94,38.36 5.35,38.73 v 27.66 l 18.88,1.57 z" />
+<line stroke-width="6" x1="55" y1="35" x2="90" y2="70" />
+<line stroke-width="6" x2="55" y1="35" x1="90" y2="70" />
+</g>
+</svg>
