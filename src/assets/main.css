@@ -374,9 +374,10 @@ grid-template-rows:auto 1fr;
 transition:250ms background-color;
 }
 
-img
+img,svg
 {
 width:100%;
+max-width:100%;
 height:auto;
 }
 

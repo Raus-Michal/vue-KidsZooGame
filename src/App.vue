@@ -1,8 +1,8 @@
-<script setup>
-import { onMounted } from 'vue';
-import Animal from './components/Animal.vue'
-import Header from './components/Header.vue'
-
+<script setup lang="ts">
+import { onMounted } from "vue";
+import Animal from "./components/Animal.vue";
+import Header from "./components/Header.vue";
+import SoundController from "./components/SoundController.vue";
 
 
 const data=[
@@ -80,17 +80,9 @@ dialog.close();
 
 <template>
 
+<SoundController />
+
 <Header />
-
-<div class="container-sound">
-<button id="button-sound-play" type="button" title="Zastav zvuk">
-<img src="./assets/svg/sound-no-play.svg" alt="sound-play">
-</button>
-
-<button id="button-sound-no-play" style="display:none;" type="button" title="Pustit zvuk">
-<img src="./assets/svg/sound-play.svg" alt="sound-play">
-</button>
-</div>
 
 <div  id="animal-buttons-container" class="container-animals">
 
@@ -110,29 +102,6 @@ dialog.close();
 </template>
 
 <style scoped>
-
-.container-sound
-{
-position:absolute;
-z-index:5;
-right:1rem;
-top:1rem;
-}
-
-.container-sound button
-{
-color:white;
-background-color:transparent;
-border:none;
-padding:0;
-width:2rem;
-height:2rem;
-width:calc(2rem + 2vw);
-height:calc(2rem + 2vw);
-max-width:4rem;
-max-height:4rem;
-border-radius:50%;
-}
 
 .container-animals
 {
