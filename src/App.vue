@@ -4,6 +4,9 @@ import Animal from "./components/Animal.vue";
 import Header from "./components/Header.vue";
 import SoundController from "./components/SoundController.vue";
 
+import { useAnimals } from '@/stores/animals';
+
+const animals = useAnimals();
 
 const data=[
   {
