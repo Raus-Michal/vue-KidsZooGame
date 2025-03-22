@@ -11,7 +11,9 @@ export const useAnimals = defineStore('animals', {
   state: () => ({
     animals: [] as Animals[], // všechna zvířata z JSON API
     selectAnimals: [] as Animals[], // náhodně vybraných 6 zvířat z animals[]
-    currentAnimal: null as Animals | null // náhodně vybrané 1 zvíře ze pole selectAnimals[] nebo null pokud nebude vybráno
+    currentAnimal: null as Animals | null, // náhodně vybrané 1 zvíře ze pole selectAnimals[] nebo null pokud nebude vybráno
+    sound: new Audio() as HTMLAudioElement, // vytvoří z proměnné sound Audio objekt, který slouží k přehrávání zvuku zvířete
+    dialog: null as HTMLDialogElement | null // Přidáme dialog, který bude po inicializaci zastupovat HTML element Dialog GO! z App.vue
   }),
   actions: {
     // Asynchronní funkce pro načtení JSON API ze serveru.
@@ -43,16 +45,25 @@ export const useAnimals = defineStore('animals', {
       console.log("Funkce selectRandomAnimals selhala: pole this.animals je prázdné");
       }
     },
-    // Funkce pro výběr náhodného zvířete z pole this.selectAnimals
+    // Funkce pro výběr náhodného zvířete z pole this.selectAnimals do pole this.currentAnimal
     currentRandomAnimal() {
       if (this.selectAnimals.length > 0) {
-      // pokud pole this.selectAnimals obsahuje nějáké objekty, bude jeho délka větší než 0
+      // pokud pole this.selectAnimals obsahuje nějáké objekty (zvířata), bude jeho délka větší než 0
       const randomIndex = Math.floor(Math.random() * this.selectAnimals.length); // Náhodný index (Math.random() generuje náhodné desetinné číslo mezi 0 (včetně) a 1 | Math.floor() zaokrouhlí číslo směrem dolů na nejbližší celé číslo.)
       this.currentAnimal = this.selectAnimals[randomIndex]; // Vybere zvíře dle náhodného indexu
       }
       else
       {
-      console.log("Funkce currentRandomAnimal selhala: pole this.selectAnimals je prázdné");
+      // pokud pole this.selectAnimals neobsahuje žádné objekty (zvířata)
+        this.selectRandomAnimals(); // Funkce výběre náhodně 6 zvířat z pole this.animals
+        if (this.selectAnimals.length > 0) {
+          // pokud pole this.selectAnimals obsahuje nějáké objekty (zvířata), bude jeho délka větší než 0
+          this.currentRandomAnimal(); // funkce spustí sama sebe
+          this.openDialog(); // otevře z komponenty App.vue Dialogové okno - Go!
+        }
+        else {
+          console.log("Výběr 6 náhodných zvířat selhal, není možné provést náhodný výběr jednoho zvířete z tohoto pole");
+        }
       }
     },
 
@@ -61,11 +72,58 @@ export const useAnimals = defineStore('animals', {
     testAnAnimal(id: number) {
       if (this.currentAnimal && this.currentAnimal.id === id) {
         console.log('Správné zvíře!');
+        this.soundAnimalstop(); // funkce, zastaví zvuk zvířete, který se přehrává
+        const myFilter=this.selectAnimals.filter((animal)=>{
+        return animal.id !== id; // myFilter bude obsahovat všechny zvířata, kromně toho, který má id == tomu id, které bylo zasláno do funkce
+        }); // odfiltrování zvířete, který má id, které bylo zasláno do funkce
+        this.selectAnimals=myFilter; // přepsání pole s náhodnými zvířaty, polem, který neobsahuje již správně určené zvíře
+        this.currentRandomAnimal(); // Funkce vybere náhodného zvířete z pole this.selectAnimals do pole this.currentAnimal
+        this.soundAnimalplay(); // funkce přehraje zvuk zvířete, které se má označit pomocí jeho obrázku
       } else {
-        console.log('Špatné zvíře.');
+          console.log('Špatné zvíře.');
+          document.body.style.backgroundColor="red"; // nastaví background-color body na red
+          setTimeout(()=>{
+            document.body.style.backgroundColor="black"; // vrátí background-color body na default hodnotu
+          },500); // vrátí background-color body na default hodnotu za čas odpovídající transition v CSS
+        }
+    },
+
+    // funkce přehraje zvuk zvířete, které se má označit pomocí jeho obrázku
+    soundAnimalplay(){
+      this.soundAnimalstop(); // funkce, pokud by se zvuk zvířete přehrával, nejprve tento zvuk zastaví
+      if (this.currentAnimal!==null){
+      // pokud není objekt this.currentAnimal === null, tedy byl naplněn potřebnými parametry
+      this.sound.src=this.currentAnimal.mp3;
+      this.sound.loop=true; // zajistí opakující se smyčku přehrávání zvuku
+      this.sound.play(); // aktivuje přehrávání zvuku
+      }
+      else
+      {
+      console.log("se zvukem se nedalo pracovat - this.currentAnimal===null");
+      }
+    },
+
+    //  funkce zastaví zvuk zvířete, které se má označit pomocí jeho obrázku
+    soundAnimalstop(){
+    // Zkontrolujeme, jestli se přehrává zvuk zvířete
+      if (!this.sound.paused) {
+      this.sound.pause(); // zastaví přehrávání zvuku
+      }
+    },
+    // přidání dialog HTML ELEMENTU do store Pinia, aby se následně tento HTML element mohl používat vrámci pinia (inicializace je z App.vue)
+    setDialog(dialog: HTMLDialogElement) {
+      this.dialog = dialog; // Přiřadíme dialogový element do proměnné this.dialog
+    },
+    openDialog() {
+      if (this.dialog) {
+        this.dialog.showModal(); // Otevřeme dialog Go! v App.vue
+      } else {
+        console.error("Dialog není inicializován!");
       }
     }
   },
+
+
   
   getters: {}
 });

@@ -3,29 +3,29 @@ import { onMounted , ref } from "vue";
 import Animals from "./components/Animals.vue";
 import Header from "./components/Header.vue";
 import SoundController from "./components/SoundController.vue";
+import { useAnimals } from '@/stores/animals';
+
+const animals = useAnimals(); // Použití store Pinia v proměnné animals
 
 const dialog = ref<HTMLDialogElement | null>(null); // Reference na dialogový element
 
-
-  // Funkce pro otevření dialogu
+// Funkce pro otevření dialogu
   const openDialog = () => {
     if (dialog.value !== null) {
       // pokud HTML element existuje
       dialog.value.showModal();  // Zobrazí dialog
+      animals.setDialog(dialog); // Inicializujeme dialog ve store, aby bylo možné ho následně spouštět z Pinia store
     }
   };
 
-  // Funkce pro zavření dialogu
+// Funkce pro zavření dialogu
   const closeDialog = () => {
-  
+    if (dialog.value !== null) {
       // pokud HTML element existuje
-      if (dialog.value) {
-        dialog.value.close();  // Zavře dialog
-      // ZDE BUDE FUNKCE NA PŘEHRÁVÁNÍ PRVNÍHO ZVUKU
-      }
-    
+      dialog.value.close();  // Zavře dialog
+      animals.soundAnimalplay(); // Funkce zapne přehrávání zvuku náhodně vybraného zvířete
+    }
   };
-
 
 onMounted(() => {
 // po načtení komponenty
@@ -44,7 +44,7 @@ onMounted(() => {
   </div>
 
   <dialog ref="dialog">
-    <button @click="closeDialog" type="button" title="Play games">Go!</button>
+    <button @click="closeDialog" type="button" title="Play game">Go!</button>
   </dialog>
 
 </template>
