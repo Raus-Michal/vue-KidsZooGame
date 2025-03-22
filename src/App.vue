@@ -1,23 +1,36 @@
 <script setup lang="ts">
-import { onMounted } from "vue";
+import { onMounted , ref } from "vue";
 import Animals from "./components/Animals.vue";
 import Header from "./components/Header.vue";
 import SoundController from "./components/SoundController.vue";
 
+const dialog = ref<HTMLDialogElement | null>(null); // Reference na dialogový element
+
+
+  // Funkce pro otevření dialogu
+  const openDialog = () => {
+    if (dialog.value !== null) {
+      // pokud HTML element existuje
+      dialog.value.showModal();  // Zobrazí dialog
+    }
+  };
+
+  // Funkce pro zavření dialogu
+  const closeDialog = () => {
+  
+      // pokud HTML element existuje
+      if (dialog.value) {
+        dialog.value.close();  // Zavře dialog
+      // ZDE BUDE FUNKCE NA PŘEHRÁVÁNÍ PRVNÍHO ZVUKU
+      }
+    
+  };
+
+
 onMounted(() => {
-
-const dialog = document.getElementById("dialog-play");
-const closeButton = document.getElementById("close-button");
-dialog.showModal(); // Otevření dialogu
-closeButton.addEventListener("click", () => {
-dialog.close();
+// po načtení komponenty
+  openDialog(); // otevře dialogové okno Go!
 });
-
-
-});
-
-
-
 </script>
 
 <template>
@@ -30,8 +43,8 @@ dialog.close();
     <Animals />
   </div>
 
-  <dialog id="dialog-play">
-    <button id="close-button" type="button" title="Play games">Go!</button>
+  <dialog ref="dialog">
+    <button @click="closeDialog" type="button" title="Play games">Go!</button>
   </dialog>
 
 </template>
