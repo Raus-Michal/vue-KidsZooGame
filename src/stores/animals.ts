@@ -19,7 +19,7 @@ export const useAnimals = defineStore('animals', {
     // Asynchronní funkce pro načtení JSON API ze serveru.
     async loadAnimals() {
       try {
-        const response = await fetch('/data/data.json'); // Načítá data z JSON souboru na zadané URL
+        const response = await fetch('data/data.json'); // Načítá data z JSON souboru na zadané URL
         if (!response.ok) throw new Error('Chyba při načítání produktů'); // Kontrola, zda požadavek proběhl úspěšně.
         this.animals = await response.json(); // Při úspěšném načtení uloží zvířata do stavu animals[]
         console.log('Zvířata načtena:', this.animals);
