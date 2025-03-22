@@ -1,69 +1,8 @@
 <script setup lang="ts">
 import { onMounted } from "vue";
-import Animal from "./components/Animal.vue";
+import Animals from "./components/Animals.vue";
 import Header from "./components/Header.vue";
 import SoundController from "./components/SoundController.vue";
-
-import { useAnimals } from '@/stores/animals';
-
-const animals = useAnimals();
-
-const data=[
-  {
-    id: 1,
-    src: "svg/kacena.svg",
-    title: "Kačena",
-    mp3: "mp3/kacena.mp3"
-  },
-  {
-    id: 2,
-    src: "svg/kocka.svg",
-    title: "Kočka",
-    mp3: "mp3/kocka.mp3"
-  },
-  {
-    id: 3,
-    src: "svg/kohout.svg",
-    title: "Kohout",
-    mp3: "mp3/kohout.mp3"
-  },
-  {
-    id: 4,
-    src: "svg/krava.svg",
-    title: "Krava",
-    mp3: "mp3/krava.mp3"
-  },
-  {
-    id: 5,
-    src: "svg/kun.svg",
-    title: "Kůň",
-    mp3: "mp3/kun.mp3"
-  },
-  {
-    id: 6,
-    src: "svg/lev.svg",
-    title: "Lev",
-    mp3: "mp3/lev.mp3"
-  },
-  {
-    id: 7,
-    src: "svg/ovce.svg",
-    title: "Ovce",
-    mp3: "mp3/ovce.mp3"
-  },
-  {
-    id: 8,
-    src: "svg/prase.svg",
-    title: "Prase",
-    mp3: "mp3/prase.mp3"
-  },
-  {
-    id: 9,
-    src: "svg/zaba.svg",
-    title: "Žába",
-    mp3: "mp3/zaba.mp3"
-  }
-];
 
 onMounted(() => {
 
@@ -85,22 +24,15 @@ dialog.close();
 
 <SoundController />
 
-<Header />
+  <Header />
 
-<div  id="animal-buttons-container" class="container-animals">
+  <div class="container-animals">
+    <Animals />
+  </div>
 
-<Animal />
-<Animal />
-<Animal />
-<Animal />
-<Animal />
-<Animal />
-
-</div>
-
-<dialog id="dialog-play">
-<button id="close-button" type="button" title="Play games">Go!</button>
-</dialog>
+  <dialog id="dialog-play">
+    <button id="close-button" type="button" title="Play games">Go!</button>
+  </dialog>
 
 </template>
 
