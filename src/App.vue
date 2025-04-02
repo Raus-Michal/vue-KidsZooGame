@@ -36,6 +36,7 @@ onMounted(() => {
 <template>
 
 <SoundController />
+  <div class="kryt"> </div>
 
   <Header />
 
@@ -70,7 +71,15 @@ grid-template-columns: repeat(3, minmax(2rem, 8rem));
 }
 }
 
-
+.kryt
+{
+position: absolute;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+z-index:-1;
+}
 
 
 dialog {

@@ -59,6 +59,7 @@ export const useAnimals = defineStore('animals', {
         if (this.selectAnimals.length > 0) {
           // pokud pole this.selectAnimals obsahuje nějáké objekty (zvířata), bude jeho délka větší než 0
           this.currentRandomAnimal(); // funkce spustí sama sebe
+          this.soundAnimalstop(); // funkce, pokud by se zvuk zvířete přehrával, nejprve tento zvuk zastaví
           this.openDialog(); // otevře z komponenty App.vue Dialogové okno - Go!
         }
         else {
@@ -69,10 +70,12 @@ export const useAnimals = defineStore('animals', {
 
 
     // funkce otestuje jestli klik na určité zvíře odpovídá přehrávanému zvuku zvířete
-    testAnAnimal(id: number) {
+    async testAnAnimal(id: number) {
       if (this.currentAnimal && this.currentAnimal.id === id) {
         console.log('Správné zvíře!');
         this.soundAnimalstop(); // funkce, zastaví zvuk zvířete, který se přehrává
+        console.log("A");
+        await this.spustAnimaci(id); // spustí asynchronní animaci buttonu se správně vybraným zvířetem
         const myFilter=this.selectAnimals.filter((animal)=>{
         return animal.id !== id; // myFilter bude obsahovat všechny zvířata, kromně toho, který má id == tomu id, které bylo zasláno do funkce
         }); // odfiltrování zvířete, který má id, které bylo zasláno do funkce
@@ -120,10 +123,65 @@ export const useAnimals = defineStore('animals', {
       } else {
         console.error("Dialog není inicializován!");
       }
+    },
+
+    async spustAnimaci(id:number): Promise<void> {
+      const element = document.getElementById(`button-${id}`) as HTMLButtonElement | null; // Najde požadovaný button
+      if (element) {
+        await this.vykonejAnimaci(element); // Počkejte na dokončení animace
+        console.log("Animace dokončena!"); // Tento kód se spustí až po animaci
+      } else {
+        console.error("Element s ID 'mojeAnimace' nebyl nalezen.");
+      }
+    },
+
+    async vykonejAnimaci(element: HTMLButtonElement): Promise<void> {
+      return new Promise(async (resolve) => {
+        const kryt = document.querySelector('.kryt') as HTMLElement;
+        if (element && kryt) {
+          kryt.style.zIndex = "10"; 
+          element.style.position = "absolute";
+          element.style.zIndex = "9";
+    
+          // Získání aktuální velikosti viewportu
+          const vyska_obrazovky = window.innerHeight; 
+          const sirka_obrazovky = window.innerWidth; 
+          const odsazeni = 16; // Okrajový prostor
+    
+          // Zajistíme, že button bude vždy čtvercový a nepřeroste obrazovku
+          let velikost_buttonu = Math.min(sirka_obrazovky, vyska_obrazovky) - (2 * odsazeni);
+          if (velikost_buttonu < 32) velikost_buttonu = 32; // Zabránění příliš malému buttonu
+    
+          // Výpočet pozice pro správné vycentrování
+          const top = Math.max((vyska_obrazovky - velikost_buttonu) / 2, odsazeni);
+          const left = Math.max((sirka_obrazovky - velikost_buttonu) / 2, odsazeni);
+    
+          console.log(`top: ${top}, left: ${left}, velikost buttonu: ${velikost_buttonu}`);
+    
+          // Nastavení stylů pro button
+          element.style.top = `${top}px`;
+          element.style.left = `${left}px`;
+          element.style.width = `${velikost_buttonu}px`;
+          element.style.height = `${velikost_buttonu}px`;
+          element.style.backgroundColor = "green";
+          element.style.transition = "all 0.3s ease-in-out"; // Plynulá animace
+    
+          // Čekáme 3000 ms před pokračováním
+          await new Promise(resolve => setTimeout(resolve, 3000));
+    
+          kryt.style.zIndex = "-1"; 
+          element.style.zIndex = "-1"; 
+          resolve();
+        } else {
+          resolve();
+        }
+      });
     }
+    
+
   },
 
-
+  
   
   getters: {}
 });

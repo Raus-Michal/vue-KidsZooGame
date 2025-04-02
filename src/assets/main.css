@@ -374,6 +374,11 @@ grid-template-rows:auto 1fr;
 transition:250ms background-color;
 }
 
+#app
+{
+background-color:transparent;
+}
+
 img,svg
 {
 width:100%;
