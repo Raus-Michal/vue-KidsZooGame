@@ -144,8 +144,10 @@ export const useAnimals = defineStore('animals', {
           element.style.zIndex = "9";
     
           // Získání aktuální velikosti viewportu
-          const vyska_obrazovky = window.innerHeight; 
-          const sirka_obrazovky = window.innerWidth; 
+          const vyska_obrazovky = window.innerHeight; // výška viewportu
+          const sirka_obrazovky = window.innerWidth; // šířka viewportu
+          const vyska_buttonu_default = element.clientHeight; // původní výška butttonu v px
+          const sirka_buttonu_default = element.clientWidth; // původní šířka butttonu v px
           const odsazeni = 16; // Okrajový prostor
     
           // Zajistíme, že button bude vždy čtvercový a nepřeroste obrazovku
@@ -159,21 +161,26 @@ export const useAnimals = defineStore('animals', {
           console.log(`top: ${top}, left: ${left}, velikost buttonu: ${velikost_buttonu}`);
     
           // Nastavení stylů pro button
+          element.style.transition = "all 0.3s ease-in-out"; // Plynulá animace
           element.style.top = `${top}px`;
           element.style.left = `${left}px`;
           element.style.width = `${velikost_buttonu}px`;
           element.style.height = `${velikost_buttonu}px`;
           element.style.backgroundColor = "green";
-          element.style.transition = "all 0.3s ease-in-out"; // Plynulá animace
-    
-          // Čekáme 3000 ms před pokračováním
-          await new Promise(resolve => setTimeout(resolve, 3000));
-    
-          kryt.style.zIndex = "-1"; 
-          element.style.zIndex = "-1"; 
-          resolve();
+          
+          
+          await new Promise(resolve => setTimeout(resolve, 1500)); // Čekáme 1500 ms před pokračováním
+        
+          element.style.transition = "none"; // default hodnota CSS
+          element.style.backgroundColor = "transparent"; // default hodnota CSS
+          element.style.width = `${sirka_buttonu_default}px`; // nastaví default šířku buttonu
+          element.style.height = `${vyska_buttonu_default}px`; // nastaví default výšku buttonu
+          element.style.position = "static"; // default hodnota CSS
+          element.style.zIndex = "auto"; // default hodnota CSS
+          kryt.style.zIndex = "-1"; // skrytí krytu
+          resolve(); // ukončení promise
         } else {
-          resolve();
+          resolve(); // ukončení promise
         }
       });
     }
