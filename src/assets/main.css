@@ -371,7 +371,7 @@ min-height:100lvh;
 min-height:100dvh;
 display:grid;
 grid-template-rows:auto 1fr;
-transition:250ms background-color;
+transition:background-color 0.25s ease-in-out;
 }
 
 #app
