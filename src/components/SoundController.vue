@@ -1,11 +1,14 @@
 <script setup lang="ts">
+import { useAnimals } from '@/stores/animals';
+
+const animals = useAnimals(); // Použití store Pinia v proměnné animals
 
 </script>
 
 <template>
 <div class="container">
-    <button type="button" title="Zastav zvuk">
-        <svg class="svg-sound" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"  style="display:none;">
+    <button v-if="animals.sound_play" type="button" title="Zastav zvuk" @click="animals.soundAnimalstop">
+        <svg class="svg-sound" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
             <path class="fill-white" d="M 41.5,90 40.76,12.8 23.94,38.36 5.35,38.73 v 27.66 l 18.88,1.57 z" />
             <g class="stroke-5">
                 <line x1="55" y1="35" x2="90" y2="70" />
@@ -14,7 +17,7 @@
         </svg>
     </button>
 
-    <button type="button" title="Pustit zvuk" >
+    <button v-else-if="!animals.sound_play" type="button" title="Pustit zvuk" @click="animals.soundAnimalplay" >
         <svg class="svg-sound" xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100">
             <path class="fill-white" d="m 41.5,88.7 -1,-77.2 -16.8,25.6 -18.6,0.5 v 27.7 l 18.9,1.6 z" />
             <g class="stroke-5">
@@ -119,7 +122,7 @@ animation-delay: .5s;
     /* Všechny bílé současně */
     50.1%, 66.6%
     {
-    stroke:green;
+    stroke:greenyellow;
     }
 
     /* Restart cyklu */

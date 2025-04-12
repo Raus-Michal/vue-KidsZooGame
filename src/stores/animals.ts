@@ -13,7 +13,8 @@ export const useAnimals = defineStore('animals', {
     selectAnimals: [] as Animals[], // náhodně vybraných 6 zvířat z animals[]
     currentAnimal: null as Animals | null, // náhodně vybrané 1 zvíře ze pole selectAnimals[] nebo null pokud nebude vybráno
     sound: new Audio() as HTMLAudioElement, // vytvoří z proměnné sound Audio objekt, který slouží k přehrávání zvuku zvířete
-    dialog: null as HTMLDialogElement | null // Přidáme dialog, který bude po inicializaci zastupovat HTML element Dialog GO! z App.vue
+    dialog: null as HTMLDialogElement | null, // Přidáme dialog, který bude po inicializaci zastupovat HTML element Dialog GO! z App.vue
+    sound_play:false as boolean // proměnná hlídá, zda se přehrává zvuk (true===zvuk se přehrává; false===zvuk byl zastaven), díky tomu vypíná a zapíná buttony v template SoundController
   }),
   actions: {
     // Asynchronní funkce pro načtení JSON API ze serveru.
@@ -99,6 +100,7 @@ export const useAnimals = defineStore('animals', {
       this.sound.src=this.currentAnimal.mp3;
       this.sound.loop=true; // zajistí opakující se smyčku přehrávání zvuku
       this.sound.play(); // aktivuje přehrávání zvuku
+      this.sound_play=true; // proměnná hlídá, zda se přehrává zvuk (true===zvuk se přehrává; false===zvuk byl zastaven), díky tomu vypíná a zapíná buttony v template SoundController
       }
       else
       {
@@ -111,6 +113,7 @@ export const useAnimals = defineStore('animals', {
     // Zkontrolujeme, jestli se přehrává zvuk zvířete
       if (!this.sound.paused) {
       this.sound.pause(); // zastaví přehrávání zvuku
+      this.sound_play=false; // proměnná hlídá, zda se přehrává zvuk (true===zvuk se přehrává; false===zvuk byl zastaven), díky tomu vypíná a zapíná buttony v template SoundController
       }
     },
     // přidání dialog HTML ELEMENTU do store Pinia, aby se následně tento HTML element mohl používat vrámci pinia (inicializace je z App.vue)

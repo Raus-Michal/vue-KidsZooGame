@@ -9,11 +9,14 @@ const animals = useAnimals(); // Použití store Pinia v proměnné animals
 
 const dialog = ref<HTMLDialogElement | null>(null); // Reference na dialogový element
 
+const open_dialog=ref(false); // proměnná hlídá, zda je otevřeno dialogové okno GO! a tím zobrazení Komponenty SoundController pomocí v-if
+
 // Funkce pro otevření dialogu
   const openDialog = () => {
     if (dialog.value !== null) {
       // pokud HTML element existuje
       dialog.value.showModal();  // Zobrazí dialog
+      open_dialog.value=true; // změní value reaktivní proměnné na true, což signalizuje, že došlo k otevření dialogového okna
       animals.setDialog(dialog); // Inicializujeme dialog ve store, aby bylo možné ho následně spouštět z Pinia store
     }
   };
@@ -23,6 +26,7 @@ const dialog = ref<HTMLDialogElement | null>(null); // Reference na dialogový e
     if (dialog.value !== null) {
       // pokud HTML element existuje
       dialog.value.close();  // Zavře dialog
+      open_dialog.value=false; // změní value reaktivní proměnné na false, což signalizuje, že došlo k zavření dialogového okna
       animals.soundAnimalplay(); // Funkce zapne přehrávání zvuku náhodně vybraného zvířete
     }
   };
@@ -35,7 +39,7 @@ onMounted(() => {
 
 <template>
 
-<SoundController />
+<SoundController v-if="!open_dialog" />
   <div class="kryt"> </div>
 
   <Header />
