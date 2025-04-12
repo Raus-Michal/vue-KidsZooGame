@@ -27,6 +27,7 @@ const open_dialog=ref(false); // proměnná hlídá, zda je otevřeno dialogové
       // pokud HTML element existuje
       dialog.value.close();  // Zavře dialog
       open_dialog.value=false; // změní value reaktivní proměnné na false, což signalizuje, že došlo k zavření dialogového okna
+      animals.go=true; // určí, že budylo zmáčknuto tlačítko Go! v store Piana
       animals.soundAnimalplay(); // Funkce zapne přehrávání zvuku náhodně vybraného zvířete
     }
   };

@@ -33,6 +33,5 @@ onMounted(async () => {
   padding: 1rem;
   width: 100%;
   height: auto;
-  transition: all 0.3s ease-in-out;
 }
 </style>
