@@ -88,10 +88,18 @@ export const useAnimals = defineStore('animals', {
         this.currentRandomAnimal(); // Funkce vybere náhodného zvířete z pole this.selectAnimals do pole this.currentAnimal
       } else {
           console.log('Špatné zvíře.');
-          document.body.style.backgroundColor="red"; // nastaví background-color body na red
-          setTimeout(()=>{
-            document.body.style.backgroundColor="black"; // vrátí background-color body na default hodnotu
-          },500); // vrátí background-color body na default hodnotu za čas odpovídající transition v CSS
+          const app=document.getElementById("app") as HTMLElement; // tělo Vue aplikace
+          if(app) {
+            // pokud HTML element existuje
+            const bodyStyleBackgroundColor:string = window.getComputedStyle(document.body,null).getPropertyValue("background-color"); // načte hodnotu bacground-color body z CSS, vestavěná funkce getComputedStyle umí číst z CSS stylu
+            const appStyleBackgroundColor:string = window.getComputedStyle(app,null).getPropertyValue("background-color"); // načte hodnotu bacground-color id="app" z CSS, vestavěná funkce getComputedStyle umí číst z CSS stylu
+            app.style.backgroundColor="red"; // změní barvu pozadí těla Vue aplikace
+            document.body.style.backgroundColor="red"; // nastaví background-color body na red
+            setTimeout(()=>{
+              app.style.backgroundColor=appStyleBackgroundColor; // změní barvu pozadí těla Vue aplikace
+              document.body.style.backgroundColor=bodyStyleBackgroundColor; // vrátí background-color body na default hodnotu
+            },500); // vrátí background-color body na default hodnotu za čas odpovídající transition v CSS
+          }
         }
     },
 
