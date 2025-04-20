@@ -96,7 +96,6 @@ export const useAnimals = defineStore('animals', {
             const kryt = document.querySelector(".kryt") as HTMLElement; // element kryt je průhledný div přes celou aplikaci, který zabrání klikání uživatele do aplikace během animace
             if(kryt){
               // pokud HTML Element existuje
-              console.log("kryt");
               kryt.style.zIndex = "10"; // aktivace krytí, aby uživatel nemohl klikat na jakýkoli button během animace
             }
 
@@ -109,7 +108,7 @@ export const useAnimals = defineStore('animals', {
                 // pokud HTML Element existuje
                 kryt.style.zIndex = "-1"; // skrytí krytu, tak, aby se neprojevoval v aplikaci
               }
-            },750); // vrátí background-color body na default hodnotu za čas odpovídající transition v CSS
+            },500); // vrátí background-color body na default hodnotu za čas odpovídající transition v CSS
           }
         }
     },

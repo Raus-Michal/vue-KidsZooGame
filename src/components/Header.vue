@@ -1,14 +1,61 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref , onMounted } from "vue";
 
-const changeColor=(color:string)=>{
-// funkce přebarví pozadí aplikace
+const button1 = ref<HTMLButtonElement | null>(null); // buton 1. pro volbu pozadí aplikace
+const button2 = ref<HTMLButtonElement | null>(null); // buton 2. pro volbu pozadí aplikace
+const button3 = ref<HTMLButtonElement | null>(null); // buton 3. pro volbu pozadí aplikace
+const button4 = ref<HTMLButtonElement | null>(null); // buton 4. pro volbu pozadí aplikace
+
+const color:string[]=["black","rgb(58, 34, 2)","rgb(2, 17, 92)","rgb(92, 1, 71)"]; // barvy [černá,hnědá,modrá,fialová]
+
+onMounted(() => {
+  if (button1.value) {
+    button1.value.style.display = "none"; // Tlačítko bude skryté, protože původní barva pozadí aplikace je černá
+    // přebarvení není třeba, default background-color je black
+  }
+
+  if (button2.value) {
+    button2.value.style.backgroundColor  = color[1]; // Přebarví button na barvu, kterou následně bude možné přebarvit barvu pozadí aplikace
+  }
+
+  if (button3.value) {
+    button3.value.style.backgroundColor  = color[2]; // Přebarví button na barvu, kterou následně bude možné přebarvit barvu pozadí aplikace
+  }
+
+  if (button4.value) {
+    button4.value.style.backgroundColor  = color[3]; // Přebarví button na barvu, kterou následně bude možné přebarvit barvu pozadí aplikace
+  }
+
+});
+
+
+
+const changeColor=(id:number)=>{
+// funkce přebarví pozadí aplikace a schová button s aktuální barvou
+
+const buttons = [button1, button2, button3, button4]; // všechny buttony vloží do pole
+
+buttons.forEach((btn, index) => {
+  if (btn.value){
+    // pokud button existuje
+    btn.value.style.display = "block"; // Zobrazí všechny buttony
+  }
+}); // smyčka všechny buttony zviditelní
+
+const activeButton = buttons[id - 1]; // Najdeme button v poli, na který bylo právě kliknuto
+if (activeButton.value) {
+  // pokud HTML element button existuje
+  activeButton.value.style.display = "none"; // Skryjeme tlačítko s aktivní barvou
+}
+
 const app=document.getElementById("app") as HTMLElement; // tělo Vue aplikace
+const colorBackground=color[id-1]; // (id - 1): určí barvu v poli, které je číslováno od 0
+
 
 if(app) {
-// pokud HTML element existuje
-app.style.backgroundColor=color; // změní barvu pozadí těla Vue aplikace
-document.body.style.backgroundColor=color; // změní barvu pozadí těla Vue aplikace
+  // pokud HTML element existuje
+  app.style.backgroundColor=colorBackground; // změní barvu pozadí těla Vue aplikace
+  document.body.style.backgroundColor=colorBackground; // změní barvu pozadí těla Vue aplikace
 }
 
 };
@@ -54,9 +101,10 @@ const dialog = ref<HTMLDialogElement | null>(null); // Reference na dialogový e
 <header>
     <a href="#" @click="openDialog" title="Information" ><h1>ZOO Game</h1></a>
     <aside>
-        <button type="button" title="Black color" @click="changeColor('black')"></button>
-        <button type="button" title="Royalblue color" @click="changeColor('royalblue')"></button>
-        <button type="button" title="Rebeccapurple color" @click="changeColor('rebeccapurple')"></button>
+        <button ref="button1" type="button" title="Color 1" @click="changeColor(1)"></button>
+        <button ref="button2" type="button" title="Color 2" @click="changeColor(2)"></button>
+        <button ref="button3" type="button" title="Color 3" @click="changeColor(3)"></button>
+        <button ref="button4" type="button" title="Color 4" @click="changeColor(4)"></button>
     </aside>
 </header>
 
@@ -94,17 +142,7 @@ min-width:2rem;
 width:2rem;
 border-radius:50%;
 border:2px solid white;
-background-color:royalblue;
-}
-
-aside button:first-child
-{
 background-color:black;
-}
-
-aside button:last-child
-{
-background-color:rebeccapurple;
 }
 
 a,a:link,a:visited,a:active
