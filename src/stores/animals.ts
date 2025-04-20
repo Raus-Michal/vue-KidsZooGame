@@ -93,12 +93,23 @@ export const useAnimals = defineStore('animals', {
             // pokud HTML element existuje
             const bodyStyleBackgroundColor:string = window.getComputedStyle(document.body,null).getPropertyValue("background-color"); // načte hodnotu bacground-color body z CSS, vestavěná funkce getComputedStyle umí číst z CSS stylu
             const appStyleBackgroundColor:string = window.getComputedStyle(app,null).getPropertyValue("background-color"); // načte hodnotu bacground-color id="app" z CSS, vestavěná funkce getComputedStyle umí číst z CSS stylu
+            const kryt = document.querySelector(".kryt") as HTMLElement; // element kryt je průhledný div přes celou aplikaci, který zabrání klikání uživatele do aplikace během animace
+            if(kryt){
+              // pokud HTML Element existuje
+              console.log("kryt");
+              kryt.style.zIndex = "10"; // aktivace krytí, aby uživatel nemohl klikat na jakýkoli button během animace
+            }
+
             app.style.backgroundColor="red"; // změní barvu pozadí těla Vue aplikace
             document.body.style.backgroundColor="red"; // nastaví background-color body na red
             setTimeout(()=>{
               app.style.backgroundColor=appStyleBackgroundColor; // změní barvu pozadí těla Vue aplikace
               document.body.style.backgroundColor=bodyStyleBackgroundColor; // vrátí background-color body na default hodnotu
-            },500); // vrátí background-color body na default hodnotu za čas odpovídající transition v CSS
+              if(kryt){
+                // pokud HTML Element existuje
+                kryt.style.zIndex = "-1"; // skrytí krytu, tak, aby se neprojevoval v aplikaci
+              }
+            },750); // vrátí background-color body na default hodnotu za čas odpovídající transition v CSS
           }
         }
     },
@@ -160,7 +171,7 @@ export const useAnimals = defineStore('animals', {
 
     async vykonejAnimaci(element: HTMLButtonElement): Promise<void> {
       return new Promise((resolve) => {
-        const kryt = document.querySelector('.kryt') as HTMLElement; // element kryt je průhledný div přes celou aplikaci, který zabrání klikání uživatele do aplikace během animace
+        const kryt = document.querySelector(".kryt") as HTMLElement; // element kryt je průhledný div přes celou aplikaci, který zabrání klikání uživatele do aplikace během animace
         if (element && kryt) {
           kryt.style.zIndex = "10"; // aktivace krytí, aby uživatel nemohl klikat na jakýkoli button během animace
 
