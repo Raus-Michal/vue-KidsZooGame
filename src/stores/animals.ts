@@ -159,13 +159,11 @@ export const useAnimals = defineStore('animals', {
     },
 
     async vykonejAnimaci(element: HTMLButtonElement): Promise<void> {
-      return new Promise(async (resolve) => {
-        const kryt = document.querySelector('.kryt') as HTMLElement;
+      return new Promise((resolve) => {
+        const kryt = document.querySelector('.kryt') as HTMLElement; // element kryt je průhledný div přes celou aplikaci, který zabrání klikání uživatele do aplikace během animace
         if (element && kryt) {
-          kryt.style.zIndex = "10"; 
-          element.style.position = "absolute";
-          element.style.zIndex = "9";
-    
+          kryt.style.zIndex = "10"; // aktivace krytí, aby uživatel nemohl klikat na jakýkoli button během animace
+
           // Získání aktuální velikosti viewportu
           const vyska_obrazovky = window.innerHeight; // výška viewportu
           const sirka_obrazovky = window.innerWidth; // šířka viewportu
@@ -184,23 +182,28 @@ export const useAnimals = defineStore('animals', {
           console.log(`top: ${top}, left: ${left}, velikost buttonu: ${velikost_buttonu}`);
     
           // Nastavení stylů ANIMACE pro button
+          element.style.position = "absolute";
+          element.style.zIndex = "9";
           element.style.top = `${top}px`;
           element.style.left = `${left}px`;
           element.style.width = `${velikost_buttonu}px`;
           element.style.height = `${velikost_buttonu}px`;
           element.style.backgroundColor = "green";
-          element.style.padding = "2rem";
+          element.style.padding = "4rem";
+          // Konec: Nastavení stylů ANIMACE pro button
           
-          await new Promise(resolve => setTimeout(resolve, 1500)); // Čekáme 1500 ms před pokračováním
-      
-          element.style.backgroundColor = "transparent"; // default hodnota CSS
-          element.style.width = `${sirka_buttonu_default}px`; // nastaví default šířku buttonu
-          element.style.height = `${vyska_buttonu_default}px`; // nastaví default výšku buttonu
-          element.style.position = "static"; // default hodnota CSS
-          element.style.zIndex = "auto"; // default hodnota CSS
-          element.style.padding = "1rem"; // default hodnota CSS
-          kryt.style.zIndex = "-1"; // skrytí krytu
-          resolve(); // ukončení promise
+          setTimeout(()=>{
+            // Odstranění stylů ANIMACE pro button
+            element.style.backgroundColor = "transparent"; // default hodnota CSS
+            element.style.width = `${sirka_buttonu_default}px`; // nastaví default šířku buttonu
+            element.style.height = `${vyska_buttonu_default}px`; // nastaví default výšku buttonu
+            element.style.position = "static"; // default hodnota CSS
+            element.style.zIndex = "auto"; // default hodnota CSS
+            element.style.padding = "1rem"; // default hodnota CSS
+            // Konec: Odstranění stylů ANIMACE pro button
+            kryt.style.zIndex = "-1"; // skrytí krytu
+            resolve(); // ukončení promise
+          },1250); // Čekáme 1250 ms před pokračováním
         } else {
           resolve(); // ukončení promise
         }
