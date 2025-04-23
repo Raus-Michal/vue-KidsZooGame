@@ -15,7 +15,8 @@ export const useAnimals = defineStore('animals', {
     sound: new Audio() as HTMLAudioElement, // vytvoří z proměnné sound Audio objekt, který slouží k přehrávání zvuku zvířete
     dialog: null as HTMLDialogElement | null, // Přidáme dialog, který bude po inicializaci zastupovat HTML element Dialog GO! z App.vue
     sound_play:false as boolean, // proměnná hlídá, zda se přehrává zvuk (true===zvuk se přehrává; false===zvuk byl zastaven), díky tomu vypíná a zapíná buttony v template SoundController
-    go:false as boolean // proměnná určuje, zda bylo zmáčknuto tlačítko Go!, pokud ano===true, pokud ne===false
+    go:false as boolean, // proměnná určuje, zda bylo zmáčknuto tlačítko Go!, pokud ano===true, pokud ne===false
+    krytActive: false as boolean // stavová proměnná pro „kryt“, který překrývá celou aplikaci a zamezuje dočasně uživateli do ní klikat (true===active, false===deactive)
   }),
   actions: {
     // Asynchronní funkce pro načtení JSON API ze serveru.
@@ -93,21 +94,14 @@ export const useAnimals = defineStore('animals', {
             // pokud HTML element existuje
             const bodyStyleBackgroundColor:string = window.getComputedStyle(document.body,null).getPropertyValue("background-color"); // načte hodnotu bacground-color body z CSS, vestavěná funkce getComputedStyle umí číst z CSS stylu
             const appStyleBackgroundColor:string = window.getComputedStyle(app,null).getPropertyValue("background-color"); // načte hodnotu bacground-color id="app" z CSS, vestavěná funkce getComputedStyle umí číst z CSS stylu
-            const kryt = document.querySelector(".kryt") as HTMLElement; // element kryt je průhledný div přes celou aplikaci, který zabrání klikání uživatele do aplikace během animace
-            if(kryt){
-              // pokud HTML Element existuje
-              kryt.style.zIndex = "10"; // aktivace krytí, aby uživatel nemohl klikat na jakýkoli button během animace
-            }
+            this.setKrytActive(true); // aktivuje kryt, aby uživatel nemohl dočasně klikat do aplikace po dobu animace
 
             app.style.backgroundColor="red"; // změní barvu pozadí těla Vue aplikace
             document.body.style.backgroundColor="red"; // nastaví background-color body na red
             setTimeout(()=>{
               app.style.backgroundColor=appStyleBackgroundColor; // změní barvu pozadí těla Vue aplikace
               document.body.style.backgroundColor=bodyStyleBackgroundColor; // vrátí background-color body na default hodnotu
-              if(kryt){
-                // pokud HTML Element existuje
-                kryt.style.zIndex = "-1"; // skrytí krytu, tak, aby se neprojevoval v aplikaci
-              }
+              this.setKrytActive(false); // deaktivuje kryt, aby uživatel po dokončení animace mohl klikat do aplikace
             },500); // vrátí background-color body na default hodnotu za čas odpovídající transition v CSS
           }
         }
@@ -157,7 +151,10 @@ export const useAnimals = defineStore('animals', {
         console.error("Dialog není inicializován!");
       }
     },
-
+    setKrytActive(active: boolean) {
+    // funkce zajišťuje změnu proměnné this.krytActive a tím mění aktivaci, nebo deaktivaci krytu
+      this.krytActive = active; // nastaví proměnnou na true anebo false
+    },
     async spustAnimaci(id:number): Promise<void> {
       const element = document.getElementById(`button-${id}`) as HTMLButtonElement | null; // Najde požadovaný button
       if (element) {
@@ -170,9 +167,8 @@ export const useAnimals = defineStore('animals', {
 
     async vykonejAnimaci(element: HTMLButtonElement): Promise<void> {
       return new Promise((resolve) => {
-        const kryt = document.querySelector(".kryt") as HTMLElement; // element kryt je průhledný div přes celou aplikaci, který zabrání klikání uživatele do aplikace během animace
-        if (element && kryt) {
-          kryt.style.zIndex = "10"; // aktivace krytí, aby uživatel nemohl klikat na jakýkoli button během animace
+        if (element) {
+          this.setKrytActive(true); // aktivuje kryt, aby uživatel nemohl dočasně klikat do aplikace po dobu animace
 
           // Získání aktuální velikosti viewportu
           const vyska_obrazovky = window.innerHeight; // výška viewportu
@@ -211,7 +207,7 @@ export const useAnimals = defineStore('animals', {
             element.style.zIndex = "auto"; // default hodnota CSS
             element.style.padding = "1rem"; // default hodnota CSS
             // Konec: Odstranění stylů ANIMACE pro button
-            kryt.style.zIndex = "-1"; // skrytí krytu
+            this.setKrytActive(false); // deaktivuje kryt, aby uživatel po dokončení animace mohl klikat do aplikace
             resolve(); // ukončení promise
           },1250); // Čekáme 1250 ms před pokračováním
         } else {

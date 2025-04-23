@@ -9,6 +9,8 @@ const animals = useAnimals(); // Použití store Pinia v proměnné animals
 
 const dialog = ref<HTMLDialogElement | null>(null); // Reference na dialogový element
 
+const kryt = ref<HTMLElement | null>(null); // Reference na div element, krytu proti kliknutí uživatele do aplikace
+
 const open_dialog=ref(false); // proměnná hlídá, zda je otevřeno dialogové okno GO! a tím zobrazení Komponenty SoundController pomocí v-if
 
 // Funkce pro otevření dialogu
@@ -41,7 +43,7 @@ onMounted(() => {
 <template>
 
 <SoundController v-if="!open_dialog" />
-  <div class="kryt"> </div>
+  <div ref="kryt" :class="{'kryt--active': animals.krytActive}" class="kryt"> </div>
 
   <Header />
 
@@ -84,6 +86,11 @@ left: 0;
 width: 100%;
 height: 100%;
 z-index:-1;
+}
+
+/* Aktivní stav krytu – vyšší z-index zabrání interakci s podkladovými prvky */
+.kryt--active {
+  z-index: 10;
 }
 
 
