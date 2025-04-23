@@ -93,9 +93,20 @@ const dialog = ref<HTMLDialogElement | null>(null); // Reference na dialogový e
 <template>
 
 <dialog ref="dialog" @click="closeDialogOnBackdropClick">
-    <p>&copy;&#8239;2024 Boar-cz</p>
-    <p>(všechna práva vyhrazena)</p>
-    <button @click="closeDialog" type="button" title="close">Close dialog</button>
+  <p>Použité ikony a&nbsp;licence</p>
+  <p>Tato aplikace využívá ikony importované z&nbsp;Vue knihoven.</p>
+  <p>Pro přehlednost uvádíme:</p>
+  <ul>
+    <li>@heroicons/vue – distribuováno pod licencí MIT</li>
+    <li>@fortawesome/vue-fontawesome – distribuováno pod licencí CC BY 4.0</li>
+    <li>vue-material-design-icons – distribuováno pod licencí MIT</li>
+    <li>oh-vue-icons – distribuováno pod licencí MIT</li>
+    <li>Ikony z knihoven, jejichž názvy začínají na&nbsp;„Gy“ (např.&nbsp;Grommet Icons) – distribuovány pod&nbsp;licencí Apache License 2.0</li>
+  </ul>
+  <p>Ikony byly importovány standardním způsobem pomocí ES modulů a následně převedeny do&nbsp;čisté SVG podoby. Veškerá autorská práva a&nbsp;licenční podmínky zůstanou u&nbsp;jejich původních tvůrců.</p>
+  <p>&copy;&#8239;2025 Boar-cz</p>
+  <p>(všechna práva vyhrazena)</p>
+  <button @click="closeDialog" type="button" title="close">Close dialog</button>
 </dialog>
 
 <header>

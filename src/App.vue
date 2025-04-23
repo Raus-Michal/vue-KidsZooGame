@@ -42,7 +42,7 @@ onMounted(() => {
 
 <template>
 
-<SoundController v-if="!open_dialog" />
+<SoundController v-if="animals.go" />
   <div ref="kryt" :class="{'kryt--active': animals.krytActive}" class="kryt"> </div>
 
   <Header />
